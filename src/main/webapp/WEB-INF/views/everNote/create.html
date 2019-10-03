@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create note</title>
+</head>
+<body>
+<h1>Create note</h1>
+<p>
+    <a href="/notes">Note list</a>
+</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<form th:action="@{/create-note}" th:object="${note}" method="post">
+    <table>
+        <tr>
+            <td>Date:</td>
+            <td><input type="date" th:field="*{date}" th:value="${date}"/></td>
+        </tr>
+        <tr>
+            <td>Goal:</td>
+            <td><input type="text" th:field="*{goal}" th:value="${goal}"/></td>
+        </tr>
+        <tr>
+            <td>Attendees:</td>
+            <td><input type="text" th:field="*{attendees}" th:value="${attendees}"/></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td><input type="text" th:field="*{content}" th:value="${content}"/></td>
+        </tr>
+        <tr>
+            <td>Category</td>
+            <td>
+                <select th:field="*{category}">
+                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Create note"></td>
+        </tr>
+    </table>
+    <p>Tag</p>
+    <p th:each="tag: ${tags}">
+        <input type="checkbox" th:field="*{tagSet}" th:value="${tag.id}" th:text="${tag.name}"/>
+    </p>
+    <p><a th:href="@{/create-tag}">New Tag</a></p>
+</form>
+</body>
+</html>

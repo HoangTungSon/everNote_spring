@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Note</title>
+</head>
+<body>
+<h1>Edit note</h1>
+<p>
+    <a href="/notes">Note list</a>
+</p>
+<!--<th:block th:if="${message}">-->
+<!--    <p th:text="${message}"></p>-->
+<!--</th:block>-->
+<form th:action="@{/edit-note}" th:object="${note}" method="post">
+    <input th:type="hidden" name="id" th:field="*{id}">
+    <table>
+        <tr>
+            <td>Date:</td>
+            <td><input type="date" th:field="*{date}"/></td>
+        </tr>
+        <tr>
+            <td>Goal:</td>
+            <td><input type="text" th:field="*{goal}"/></td>
+        </tr>
+        <tr>
+            <td>Attendees:</td>
+            <td><input type="text" th:field="*{attendees}"/></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td><input type="text" th:field="*{content}"/></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <select name="category">
+                    <option th:each="p : ${categories}"
+                            th:value="${p.id}"
+                            th:text="${p.name}"
+                            th:selected="(${p.id} == *{category.id})"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Update note"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

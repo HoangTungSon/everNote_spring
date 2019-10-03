@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    <a href="/notes">Note list</a>
+</p>
+<form>
+    <input th:type="hidden" name="id" th:field="*{id}">
+    <table>
+        <tr>
+            <td>Date:</td>
+            <td th:text = "${note.date}"/></td>
+        </tr>
+        <tr>
+            <td>Goal:</td>
+            <td th:text="${note.goal}"></td>
+        </tr>
+        <tr>
+            <td>Attendees:</td>
+            <td th:text="${note.attendees}"></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td th:text="${note.content}"></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td th:text="${note.category.name}"></td>
+        </tr>
+        <tr>
+            <td>Tag:</td>
+            <td>
+                <th:block th:each="tag: ${tags}">
+                    <a th:text="${tag.name}"></a>
+                </th:block>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

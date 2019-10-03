@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create tag</title>
+</head>
+<body>
+<h1>Create tag</h1>
+<p>
+    <a href="/tags">Tag list</a>
+</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<form th:action="@{/create-tag}" th:object="${tag}" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{name}"/></td>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Create tag"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
