@@ -12,23 +12,23 @@
 <th:block th:if="${message}">
     <p th:text="${message}"></p>
 </th:block>
-<form th:action="@{/create-note}" th:object="${note}" method="post">
+<form th:action="@{/create-note-post}" th:object="${note}" method="post">
     <table>
         <tr>
             <td>Date:</td>
-            <td><input type="date" th:field="*{date}" th:value="${date}"/></td>
+            <td><input type="date" id="dateNote" name="dateNote" th:value="${dateNote.value}"/></td>
         </tr>
         <tr>
             <td>Goal:</td>
-            <td><input type="text" th:field="*{goal}" th:value="${goal}"/></td>
+            <td><input type="text" id="goalNote" name="goalNote" th:value="${goalNote.value}"/></td>
         </tr>
         <tr>
             <td>Attendees:</td>
-            <td><input type="text" th:field="*{attendees}" th:value="${attendees}"/></td>
+            <td><input type="text" id="attendeeNote" name="attendeeNote" th:value="${attendeeNote.value}"/></td>
         </tr>
         <tr>
             <td>Content:</td>
-            <td><input type="text" th:field="*{content}" th:value="${content}"/></td>
+            <td><input type="text" id="contentNote" name="contentNote" th:value="${contentNote.value}"/></td>
         </tr>
         <tr>
             <td>Category</td>
@@ -47,7 +47,6 @@
     <p th:each="tag: ${tags}">
         <input type="checkbox" th:field="*{tagSet}" th:value="${tag.id}" th:text="${tag.name}"/>
     </p>
-    <p><a th:href="@{/create-tag}">New Tag</a></p>
 </form>
 </body>
 </html>

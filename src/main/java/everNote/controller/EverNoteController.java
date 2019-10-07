@@ -15,10 +15,35 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @SessionAttributes("note")
 public class EverNoteController {
+
+    private void cookieUpload(@RequestParam("goalNote") String goalParam, @RequestParam("dateNote") String dateParam, @RequestParam("attendeeNote") String attendeeParam, @RequestParam("contentNote") String contentParam, HttpServletResponse response, ModelAndView modelAndView) {
+        Cookie cookie1 = new Cookie("goal", goalParam);
+        cookie1.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie1);
+
+        Cookie cookie2 = new Cookie("date", dateParam);
+        cookie2.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie2);
+
+        Cookie cookie3 = new Cookie("attendees", attendeeParam);
+        cookie3.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie3);
+
+        Cookie cookie4 = new Cookie("content", contentParam);
+        cookie4.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie4);
+
+        modelAndView.addObject("goalNote", cookie1);
+        modelAndView.addObject("dateNote", cookie2);
+        modelAndView.addObject("attendeeNote", cookie3);
+        modelAndView.addObject("contentNote", cookie4);
+    }
 
     @Autowired
     private CategoryService categoryService;
@@ -28,7 +53,6 @@ public class EverNoteController {
 
     @Autowired
     private TagService tagService;
-
 
     @ModelAttribute("categories")
     public Iterable<Category> categories() {
@@ -40,6 +64,11 @@ public class EverNoteController {
         return tagService.findAll();
     }
 
+    @ModelAttribute("note")
+    public EverNote note() {
+        return new EverNote();
+    }
+
     @GetMapping("/notes")
     public ModelAndView noteList(Pageable pageable) {
         Page<EverNote> noteList = noteService.findAll(pageable);
@@ -49,46 +78,50 @@ public class EverNoteController {
     }
 
     @GetMapping("/create-note")
-    public ModelAndView createForm() {
-        return new ModelAndView("/everNote/create", "note", new EverNote());
+    public ModelAndView createForm(@CookieValue(value = "goal", defaultValue = "") String goal,
+                                   @CookieValue(value = "date", defaultValue = "") String date,
+                                   @CookieValue(value = "attendees", defaultValue = "") String attendees,
+                                   @CookieValue(value = "content", defaultValue = "") String content,
+                                   HttpServletResponse response, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView("/everNote/create");
+
+        cookieUpload(goal, date, attendees, content, response, modelAndView);
+
+        modelAndView.addObject("note", new EverNote());
+
+        return modelAndView;
     }
 
-    @PostMapping("/create-note")
-    public ModelAndView saveNote(@ModelAttribute("note") EverNote note, BindingResult bindingResult) {
+    @PostMapping("/create-note-post")
+    public ModelAndView saveNote(@ModelAttribute("note") EverNote note, BindingResult bindingResult,
+                                 @CookieValue(value = "goal", defaultValue = "") String goal,
+                                 @CookieValue(value = "date", defaultValue = "") String date,
+                                 @CookieValue(value = "attendees", defaultValue = "") String attendees,
+                                 @CookieValue(value = "content", defaultValue = "") String content,
+
+                                 @RequestParam("goalNote") String goalParam,
+                                 @RequestParam("dateNote") String dateParam,
+                                 @RequestParam("attendeeNote") String attendeeParam,
+                                 @RequestParam("contentNote") String contentParam,
+
+                                 HttpServletResponse response, HttpServletRequest request) {
+
         ModelAndView modelAndView = new ModelAndView("/everNote/create");
         if (!bindingResult.hasErrors()) {
             modelAndView.addObject("message", "Create success");
         } else {
             modelAndView.addObject("message", "fail to create");
         }
+
+        cookieUpload(goalParam, dateParam, attendeeParam, contentParam, response, modelAndView);
+
+        note.setGoal(goalParam);
+        note.setDate(dateParam);
+        note.setContent(contentParam);
+        note.setAttendees(attendeeParam);
+
         noteService.save(note);
         modelAndView.addObject("note", new EverNote());
-        return modelAndView;
-    }
-
-    @GetMapping("/tag-create")
-    public ModelAndView createTag(@CookieValue(value = "date", defaultValue = "") String date,
-                                  @CookieValue(value = "goal", defaultValue = "") String goal,
-                                  @CookieValue(value = "content", defaultValue = "") String content,
-                                  @CookieValue(value = "attendees", defaultValue = "") String attendees,
-                                  @ModelAttribute("note") EverNote note
-                                  ) {
-        Cookie cookieDate = new Cookie("date", date);
-        Cookie cookieGoal = new Cookie("goal", goal);
-        Cookie cookieContent = new Cookie("content", content);
-        Cookie cookieAttendees = new Cookie("attendees", attendees);
-
-        date = note.getDate();
-        goal = note.getGoal();
-        content = note.getContent();
-        attendees = note.getAttendees();
-
-        ModelAndView modelAndView = new ModelAndView("/everNote/create");
-        modelAndView.addObject("date", date);
-        modelAndView.addObject("goal", goal);
-        modelAndView.addObject("content", content);
-        modelAndView.addObject("attendees", attendees);
-
         return modelAndView;
     }
 
