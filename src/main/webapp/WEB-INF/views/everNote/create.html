@@ -16,19 +16,22 @@
     <table>
         <tr>
             <td>Date:</td>
-            <td><input type="date" id="dateNote" name="dateNote" th:value="${dateNote.value}"/></td>
+            <td><input type="date" th:field="*{date}"/></td>
         </tr>
         <tr>
             <td>Goal:</td>
-            <td><input type="text" id="goalNote" name="goalNote" th:value="${goalNote.value}"/></td>
+            <td><input type="text" th:field="*{goal}"/></td>
+
         </tr>
         <tr>
             <td>Attendees:</td>
-            <td><input type="text" id="attendeeNote" name="attendeeNote" th:value="${attendeeNote.value}"/></td>
+            <td><input type="text" th:field="*{attendees}"/></td>
+
         </tr>
         <tr>
             <td>Content:</td>
-            <td><input type="text" id="contentNote" name="contentNote" th:value="${contentNote.value}"/></td>
+            <td><input type="text" th:field="*{content}"/></td>
+
         </tr>
         <tr>
             <td>Category</td>
@@ -38,15 +41,15 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Create note"></td>
-        </tr>
     </table>
     <p>Tag</p>
     <p th:each="tag: ${tags}">
         <input type="checkbox" th:field="*{tagSet}" th:value="${tag.id}" th:text="${tag.name}"/>
     </p>
+    <button>Create new Note</button>
+</form>
+<form th:action="@{/create-tag}" method="get">
+    <button>Create new tag</button>
 </form>
 </body>
 </html>
