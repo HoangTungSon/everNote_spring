@@ -3,9 +3,11 @@ package everNote.configuration;
 import everNote.service.CategoryService;
 import everNote.service.EverNoteService;
 import everNote.service.TagService;
+import everNote.service.UserService;
 import everNote.service.impl.CategoryServiceImpl;
 import everNote.service.impl.EverNoteServiceImpl;
 import everNote.service.impl.TagServiceImpl;
+import everNote.service.impl.UserServiceImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,6 +71,11 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
 
     @Bean
     public CategoryService categoryService(){return new CategoryServiceImpl();
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceImpl();
     }
 
     //Thymeleaf Configuration

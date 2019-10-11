@@ -3,14 +3,17 @@ package everNote.controller;
 import everNote.model.Category;
 import everNote.model.EverNote;
 import everNote.model.Tag;
+import everNote.model.User;
 import everNote.service.CategoryService;
 import everNote.service.EverNoteService;
 import everNote.service.TagService;
+import everNote.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -27,6 +30,9 @@ public class UserController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private UserService userService;
+
     @ModelAttribute("categories")
     public Iterable<Category> categories() {
         return categoryService.findAll();
@@ -39,7 +45,7 @@ public class UserController {
 
     @ModelAttribute("note")
     public EverNote note(@ModelAttribute("note") EverNote note) {
-        if(note == null){
+        if (note == null) {
             note = new EverNote();
         }
         return note;
@@ -53,4 +59,24 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping("/registration")
+    public ModelAndView register() {
+        ModelAndView modelAndView = new ModelAndView("/loginPage/registerPage");
+        modelAndView.addObject("user", new User());
+        return modelAndView;
+    }
+
+    @PostMapping("/registration")
+    public ModelAndView registerSuccessfully(@ModelAttribute("user") User user, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView("/loginPage/registerPage");
+
+        if(!bindingResult.hasErrors()) {
+            userService.save(user);
+            modelAndView.addObject("message", "successfully creating new user");
+        } else {
+            modelAndView.addObject("message", "failed to create new user");
+        }
+        modelAndView.addObject("user", new User());
+        return modelAndView;
+    }
 }
