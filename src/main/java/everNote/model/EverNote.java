@@ -15,6 +15,8 @@ public class EverNote {
     private String goal;
     private String attendees;
     private String content;
+    private String username;
+
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -45,6 +47,24 @@ public class EverNote {
         this.goal = goal;
         this.attendees = attendees;
         this.content = content;
+    }
+
+    public EverNote(String date, String goal, String attendees, String content, String username, Category category, Set<Tag> tagSet) {
+        this.date = date;
+        this.goal = goal;
+        this.attendees = attendees;
+        this.content = content;
+        this.username = username;
+        this.category = category;
+        this.tagSet = tagSet;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {

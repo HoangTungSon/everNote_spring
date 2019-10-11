@@ -16,4 +16,6 @@ public interface EverNoteService {
 
     Iterable<EverNote> findAllByTag(Tag tag);
 
+    Iterable<EverNote> findAllByUsername(String username);
+
 }

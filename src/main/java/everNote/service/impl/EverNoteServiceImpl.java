@@ -37,4 +37,11 @@ public class EverNoteServiceImpl implements EverNoteService {
     public Iterable<EverNote> findAllByTag(Tag tag) {
         return noteRepository.findAllByTagSet(tag);
     }
+
+    @Override
+    public Iterable<EverNote> findAllByUsername(String username) {
+        return noteRepository.findAllByUsername(username);
+    }
+
+
 }

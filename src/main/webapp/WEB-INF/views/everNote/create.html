@@ -12,7 +12,7 @@
 <th:block th:if="${message}">
     <p th:text="${message}"></p>
 </th:block>
-<form th:action="@{/create-note-post}" th:object="${note}" method="post">
+<form th:action="@{/create-note}" th:object="${note}" method="post">
     <table>
         <tr>
             <td>Date:</td>
@@ -26,12 +26,10 @@
         <tr>
             <td>Attendees:</td>
             <td><input type="text" th:field="*{attendees}"/></td>
-
         </tr>
         <tr>
             <td>Content:</td>
             <td><input type="text" th:field="*{content}"/></td>
-
         </tr>
         <tr>
             <td>Category</td>

@@ -15,9 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 
 @Controller
 @SessionAttributes("note")
@@ -51,7 +49,7 @@ public class EverNoteController {
     }
 
     @GetMapping("/notes")
-    public ModelAndView noteList(@PageableDefault(value = 5, sort = "Date") Pageable pageable) {
+    public ModelAndView noteList(Pageable pageable) {
         Page<EverNote> noteList = noteService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/everNote/list");
         modelAndView.addObject("notes", noteList);
@@ -59,8 +57,7 @@ public class EverNoteController {
     }
 
     @GetMapping("/create-note")
-    public ModelAndView createForm(@ModelAttribute("note") EverNote note
-    ) {
+    public ModelAndView createForm(@ModelAttribute("note") EverNote note) {
 
         ModelAndView modelAndView = new ModelAndView("/everNote/create");
 
@@ -69,17 +66,16 @@ public class EverNoteController {
         return modelAndView;
     }
 
-    @PostMapping("/create-note-post")
-    public ModelAndView saveNote(@ModelAttribute("note") EverNote note, BindingResult bindingResult
+    @PostMapping("/create-note")
+    public ModelAndView saveNote(@ModelAttribute("note") EverNote note, BindingResult bindingResult, Principal principal
     ) {
-
         ModelAndView modelAndView = new ModelAndView("/everNote/create");
         if (!bindingResult.hasErrors()) {
             modelAndView.addObject("message", "Create success");
         } else {
             modelAndView.addObject("message", "fail to create");
         }
-
+        note.setUsername(principal.getName());
         noteService.save(note);
         modelAndView.addObject("note", note);
         return modelAndView;

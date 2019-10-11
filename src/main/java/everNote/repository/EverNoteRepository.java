@@ -9,4 +9,6 @@ public interface EverNoteRepository extends PagingAndSortingRepository<EverNote,
     Iterable<EverNote> findAllByCategory(Category category);
 
     Iterable<EverNote> findAllByTagSet(Tag tag);
+
+    Iterable<EverNote> findAllByUsername(String username);
 }

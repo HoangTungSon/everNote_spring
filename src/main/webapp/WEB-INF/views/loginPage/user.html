@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>User Page</title>
+</head>
+<body>
+<h2>User page</h2>
+<hr/>
+<h3>User dashboard</h3>
+<div sec:authorize="isAuthenticated()">
+    <b>Welcome!<span sec:authentication="principal.username"></span></b>
+</div>
+<br/>
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/notes}">Notes</a> | <a th:href="@{/logout}">Logout</a>
+</div>
+<a href="/create-note">Create note</a>
+<h1>Notes</h1>
+<table border="1">
+    <tr>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Goal</th>
+        <th>Attendees</th>
+        <th>Content</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <th:block th:each="note : ${notes}">
+        <tr>
+            <td th:text="${note.category.name}"></td>
+            <td th:text="${note.date}"></td>
+            <td><a th:href="@{/view-note/__${note.id}__ }" th:text="${note.goal}"></a></td>
+            <td th:text="${note.attendees}"></td>
+            <td th:text="${note.content}"></td>
+            <td><a th:href="@{/edit-note/__${note.id}__ }">Edit</a></td>
+            <td><a th:href="@{/delete-note/__${note.id}__ }">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>
