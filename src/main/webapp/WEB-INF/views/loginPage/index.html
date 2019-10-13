@@ -13,6 +13,8 @@
     <!-- Print the logged in user name -->
     <div sec:authorize="isAuthenticated()">
         <span sec:authentication="principal.username"></span>
+        <span sec:authentication="principal.authorities"></span>
+        <span sec:authentication="principal.password"></span>
     </div>
 </h3>
 <div sec:authorize="isAnonymous()">

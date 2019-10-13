@@ -11,9 +11,7 @@ import everNote.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
@@ -51,6 +49,7 @@ public class UserController {
         return note;
     }
 
+
     @GetMapping("/user")
     public ModelAndView noteList(Principal principal) {
         Iterable<EverNote> noteUser = noteService.findAllByUsername(principal.getName());
@@ -71,12 +70,33 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView("/loginPage/registerPage");
 
         if(!bindingResult.hasErrors()) {
+            user.setRoles("USER");
             userService.save(user);
             modelAndView.addObject("message", "successfully creating new user");
         } else {
             modelAndView.addObject("message", "failed to create new user");
         }
         modelAndView.addObject("user", new User());
+        return modelAndView;
+    }
+
+    @GetMapping("/change-password")
+    public ModelAndView passwordChange(@ModelAttribute("user") User user){
+        ModelAndView modelAndView = new ModelAndView("/loginPage/changePassword");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
+    @PostMapping("/change-password")
+    public ModelAndView passwordUpdate(@ModelAttribute("user") User user, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView("/loginPage/changePassword");
+        if(!bindingResult.hasErrors()) {
+            userService.save(user);
+            modelAndView.addObject("message", "successfully creating new user");
+        } else {
+            modelAndView.addObject("message", "failed to create nedw user");
+        }
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 }
