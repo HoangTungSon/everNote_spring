@@ -49,7 +49,6 @@ public class UserController {
         return note;
     }
 
-
     @GetMapping("/user")
     public ModelAndView noteList(Principal principal) {
         Iterable<EverNote> noteUser = noteService.findAllByUsername(principal.getName());
@@ -66,11 +65,12 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView registerSuccessfully(@ModelAttribute("user") User user, BindingResult bindingResult){
+    public ModelAndView registerSuccessfully(@ModelAttribute("user") User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("/loginPage/registerPage");
 
-        if(!bindingResult.hasErrors()) {
+        if (!bindingResult.hasErrors()) {
             user.setRoles("USER");
+
             userService.save(user);
             modelAndView.addObject("message", "successfully creating new user");
         } else {
@@ -81,16 +81,18 @@ public class UserController {
     }
 
     @GetMapping("/change-password")
-    public ModelAndView passwordChange(@ModelAttribute("user") User user){
+    public ModelAndView passwordChange(Principal principal) {
+        String name = principal.getName();
+        User user = userService.findByUsername(name);
         ModelAndView modelAndView = new ModelAndView("/loginPage/changePassword");
         modelAndView.addObject("user", user);
         return modelAndView;
     }
 
     @PostMapping("/change-password")
-    public ModelAndView passwordUpdate(@ModelAttribute("user") User user, BindingResult bindingResult){
+    public ModelAndView passwordUpdate(@ModelAttribute("user") User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("/loginPage/changePassword");
-        if(!bindingResult.hasErrors()) {
+        if (!bindingResult.hasErrors()) {
             userService.save(user);
             modelAndView.addObject("message", "successfully creating new user");
         } else {

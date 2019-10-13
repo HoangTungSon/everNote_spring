@@ -13,4 +13,6 @@ public interface UserService {
 
     Iterable<User> findAllByUsername(String username);
 
+    User findByUsername(String username);
+
 }
